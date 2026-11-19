@@ -1,4 +1,4 @@
-?php
+<?php
 $host = 'localhost';
 $dbname = 'yiams_db';
 $username = 'root';

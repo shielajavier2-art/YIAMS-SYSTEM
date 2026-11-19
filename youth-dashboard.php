@@ -365,13 +365,14 @@ body {
             YIAMS <span>Youth</span>
         </div>
         <nav class="sidebar-nav">
+            <a href="#" class="active" data-tab="dashboard">📊 Dashboard</a>
             <a href="#" data-tab="profile">👤 My Profile</a>
             <a href="#" data-tab="apply">📝 Apply for Program</a>
             <a href="#" data-tab="myapps">📄 My Applications</a>
             <a href="#" data-tab="notifications">🔔 Notifications <span class="badge-dot" id="notifBadge" style="display:none;">0</span></a>
             <a href="#" data-tab="feedback">💬 Feedback</a>
             <a href="#" data-tab="transactions">📋 Transaction Logs</a>
-            <a href="maindashboard.html">🚪 Log Out</a>
+            <a href="logout.php" id="logoutLink">🚪 Log Out</a>
         </nav>
     </aside>
 
@@ -411,7 +412,22 @@ body {
         <!-- ========== DASHBOARD OVERVIEW ========== -->
         <div class="tab-content active" id="tab-dashboard">
             <div class="stats-row">
-                
+                <div class="stat-box">
+                    <div class="stat-val" id="statTotalApps">0</div>
+                    <div class="stat-lab">Total Applications</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-val" id="statPending">0</div>
+                    <div class="stat-lab">Pending</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-val" id="statApproved">0</div>
+                    <div class="stat-lab">Approved</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-val" id="statUnread">0</div>
+                    <div class="stat-lab">Unread Notifications</div>
+                </div>
             </div>
 
             <div class="card">
@@ -525,10 +541,10 @@ body {
         </div>
 
         <!-- ==========  APPLICATIONS TAB ========== -->
-        <div class="tab-content" id="tab-apps">
+        <div class="tab-content" id="tab-myapps">
             <div class="card">
-                <h3 class="card-title">📄  Applications</h3>
-                <div id="AppsList"></div>
+                <h3 class="card-title">📄 My Applications</h3>
+                <div id="myAppsList"></div>
             </div>
         </div>
 
@@ -614,7 +630,7 @@ body {
             document.getElementById('logoutLink').addEventListener('click', function (e) {
                 e.preventDefault();
                 sessionStorage.clear();
-                window.location.href = 'YIAMS — Role Selection.html';
+                window.location.href = 'logout.php';
             });
         });
 

@@ -3,9 +3,14 @@ session_start();
 // ✅ Make sure filename is db_connect.php
 require 'db_connect.php';
 
-$role = trim($_POST['role']);
-$userCred = trim($_POST['userCred']);
-$password = $_POST['password'];
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    header("Location: login.php");
+    exit;
+}
+
+$role = trim($_POST['role'] ?? '');
+$userCred = trim($_POST['userCred'] ?? '');
+$password = $_POST['password'] ?? '';
 
 // ✅ Normal dash -> $pdo->prepare
 $stmt = $pdo->prepare("SELECT id, username, email, password, role, full_name FROM users WHERE username = :cred OR email = :cred");

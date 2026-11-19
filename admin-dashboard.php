@@ -365,12 +365,12 @@ body {
             <a href="#" data-tab="notifications">📋 Requirements <span class="badge-dot" id="notifBadge" style="display:none;">0</span></a>
             <a href="#" data-tab="feedback">📢 Notifications</a>
                <h5>Monitoring</h5>
-            <a href="#"data-tab="Reports">📈 Reports</a>
-            <a href="#"data-tab="Settings">⚙️ System Logs</a>
+            <a href="#" data-tab="Reports">📈 Reports</a>
+            <a href="#" data-tab="Systemlogs">⚙️ System Logs</a>
 
             <h5>Settings</h5>
             <a href="#">🔧 Account Settings</a>
-            <a href="maindashboard.html">🚪 Log Out</a>
+            <a href="logout.php" id="logoutLink">🚪 Log Out</a>
         </nav>
     </aside>
 
@@ -379,12 +379,12 @@ body {
         <!-- Top Bar -->
         <div class="top-bar">
             <div class="page-title">
-                <h2>Welcome, <span >Admin</span>!</h2>
+                <h2>Welcome, <span id="displayName"><?= htmlspecialchars($loggedName) ?></span>!</h2>
                 <p>Barangay 22 Binanuahan East, Legazpi City — Youth Information & Assistance Management System</p>
             </div>
             <div class="user-profile">
                 <div class="user-info">
-                    <div id="userName">Admin</div>
+                    <div id="userName"><?= htmlspecialchars($loggedName) ?></div>
                     <small>admin</small>
                 </div>
                 <label class="avatar-wrapper" title="Click to change profile picture">
@@ -410,7 +410,22 @@ body {
         <!-- ========== DASHBOARD OVERVIEW ========== -->
         <div class="tab-content active" id="tab-dashboard">
             <div class="stats-row">
-                
+                <div class="stat-box">
+                    <div class="stat-val" id="statTotalApps">0</div>
+                    <div class="stat-lab">Total Applications</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-val" id="statPending">0</div>
+                    <div class="stat-lab">Pending</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-val" id="statApproved">0</div>
+                    <div class="stat-lab">Approved</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-val" id="statUnread">0</div>
+                    <div class="stat-lab">Unread Notifications</div>
+                </div>
             </div>
 
             <div class="card">
@@ -424,7 +439,53 @@ body {
             </div>
         </div>
 
-       
+        <!-- ========== YOUTH RECORDS TAB ========== -->
+        <div class="tab-content" id="tab-profile">
+            <div class="card">
+                <h3 class="card-title">👤 Youth Records</h3>
+
+                <div id="profileView">
+                    <div class="grid-2">
+                        <div>
+                            <div class="info-row">
+                                <span class="info-label">Full Name</span>
+                                <span class="info-value" id="vName">—</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">Youth ID</span>
+                                <span class="info-value" id="vYid">—</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">Age</span>
+                                <span class="info-value" id="vAge">—</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">Birthday</span>
+                                <span class="info-value" id="vBday">—</span>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="info-row">
+                                <span class="info-label">Address</span>
+                                <span class="info-value" id="vAddr">—</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">Contact No.</span>
+                                <span class="info-value" id="vContact">—</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">Email</span>
+                                <span class="info-value" id="vEmail">—</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">Registered On</span>
+                                <span class="info-value" id="vRegDate">—</span>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn btn-secondary" id="editProfileBtn">✏️ Edit Record</button>
+                </div>
+
                 <!-- Edit Form -->
                 <div id="profileForm" class="hidden-form">
                     <label>Full Name</label>
@@ -585,7 +646,7 @@ body {
             document.getElementById('logoutLink').addEventListener('click', function (e) {
                 e.preventDefault();
                 sessionStorage.clear();
-                window.location.href = 'YIAMS — Role Selection.html';
+                window.location.href = 'logout.php';
             });
         });
 
@@ -631,8 +692,6 @@ body {
         // === PROFILE MANAGEMENT ===
         function loadProfile() {
             const name = localStorage.getItem('youthName') || 'Youth User';
-            document.getElementById('displayName').textContent = name;
-            document.getElementById('userName').textContent = name;
             document.getElementById('vName').textContent = name;
             document.getElementById('eName').value = name;
 

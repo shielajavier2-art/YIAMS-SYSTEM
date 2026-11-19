@@ -225,8 +225,6 @@ body {
         </select>
     </div>
 
-
-        <form action="login-process.php" method="POST">
             <div class="form-group">
                 <label for="userCred">Username / Email</label>
                 <input
@@ -247,7 +245,7 @@ body {
                     id="userPass"
                     name="password"
                     placeholder="Enter your password"
-                   
+                    required
                 >
 
                 <label class="show-password-container">
