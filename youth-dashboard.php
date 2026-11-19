@@ -675,7 +675,8 @@ body {
 
         // === PROFILE MANAGEMENT ===
         function loadProfile() {
-            const name = localStorage.getItem('youthName') || 'Youth User';
+            // Use the name the admin registered unless the youth edited it in My Profile
+            const name = localStorage.getItem('youthName') || <?= json_encode($loggedName, JSON_HEX_TAG) ?>;
             document.getElementById('displayName').textContent = name;
             document.getElementById('userName').textContent = name;
             document.getElementById('vName').textContent = name;

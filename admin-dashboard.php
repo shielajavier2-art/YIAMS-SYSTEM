@@ -5,6 +5,36 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
     exit;
 }
 $loggedName = $_SESSION['full_name'];
+
+require 'db_connect.php';
+
+// Secret token so register-youth.php only accepts the form from this page
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
+
+// All youth accounts, newest first, for the "Registered Youth Accounts" list
+$youthAccounts = $pdo->query(
+    "SELECT username, email, full_name, created_at FROM users WHERE role = 'youth' ORDER BY created_at DESC"
+)->fetchAll(PDO::FETCH_ASSOC);
+
+// Messages shown after the Register Youth form is submitted
+$registerErrors = [
+    'expired'  => 'The form expired. Please try again.',
+    'missing'  => 'Please fill in all fields.',
+    'name'     => 'Full name must be 100 characters or less.',
+    'username' => 'Username must be 4–50 characters: letters, numbers, or underscore only.',
+    'email'    => 'Please enter a valid email address.',
+    'short'    => 'Password must be at least 8 characters.',
+    'mismatch' => 'Passwords do not match.',
+    'taken'    => 'That username or email is already used by another account.',
+];
+$registerError = $registerErrors[$_GET['reg_error'] ?? ''] ?? '';
+$registeredUsername = $_GET['registered'] ?? '';
+
+// What the admin typed before an error, so they don't have to retype it
+$oldInput = $_SESSION['register_old'] ?? [];
+unset($_SESSION['register_old']);
 ?>
 
 <!DOCTYPE html>
@@ -340,6 +370,12 @@ body {
 
         .empty-state { text-align: center; padding: 30px; color: #9ca3af; font-size: 14px; }
 
+        /* === Register Youth messages === */
+        .form-alert { padding: 12px 16px; border-radius: 8px; font-size: 14px; margin-bottom: 16px; }
+        .form-alert.success { background: #d1fae5; color: #065f46; }
+        .form-alert.error { background: #fee2e2; color: #b91c1c; }
+        .form-hint { font-size: 12px; color: #4b5563; margin-top: 10px; }
+
         @media (max-width: 900px) {
             .stats-row { grid-template-columns: repeat(2, 1fr); }
             .grid-2 { grid-template-columns: 1fr; }
@@ -360,6 +396,7 @@ body {
         <nav class="sidebar-nav">
             <a href="#" class="active" data-tab="dashboard">📊 Dashboard</a>
             <a href="#" data-tab="profile">👤 Youth Records</a>
+            <a href="#" data-tab="register">➕ Register Youth</a>
             <a href="#" data-tab="apply">📝  Program</a>
             <a href="#" data-tab="myapps">📄 Applications</a>
             <a href="#" data-tab="notifications">📋 Requirements <span class="badge-dot" id="notifBadge" style="display:none;">0</span></a>
@@ -509,6 +546,85 @@ body {
                     <button class="btn btn-success" id="saveProfileBtn">💾 Save Changes</button>
                     <button class="btn btn-outline" id="cancelEditBtn">Cancel</button>
                 </div>
+            </div>
+        </div>
+
+        <!-- ========== REGISTER YOUTH TAB ========== -->
+        <div class="tab-content" id="tab-register">
+            <div class="card">
+                <h3 class="card-title">➕ Register Youth Account</h3>
+
+                <?php if ($registeredUsername !== ''): ?>
+                    <div class="form-alert success">
+                        ✅ Account <strong><?= htmlspecialchars($registeredUsername) ?></strong> was created. They can now log in as Youth.
+                    </div>
+                <?php endif; ?>
+
+                <?php if ($registerError !== ''): ?>
+                    <div class="form-alert error">❌ <?= htmlspecialchars($registerError) ?></div>
+                <?php endif; ?>
+
+                <form action="register-youth.php" method="POST" autocomplete="off">
+                    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
+
+                    <label for="regFullName">Full Name *</label>
+                    <input type="text" id="regFullName" name="full_name" maxlength="100" required
+                           placeholder="Juan Dela Cruz"
+                           value="<?= htmlspecialchars($oldInput['full_name'] ?? '') ?>">
+
+                    <div class="grid-2">
+                        <div>
+                            <label for="regUsername">Username *</label>
+                            <input type="text" id="regUsername" name="username" minlength="4" maxlength="50" required
+                                   pattern="[A-Za-z0-9_]+" title="Letters, numbers, or underscore only"
+                                   placeholder="juan_delacruz"
+                                   value="<?= htmlspecialchars($oldInput['username'] ?? '') ?>">
+                        </div>
+                        <div>
+                            <label for="regEmail">Email *</label>
+                            <input type="email" id="regEmail" name="email" maxlength="100" required
+                                   placeholder="juan@email.com"
+                                   value="<?= htmlspecialchars($oldInput['email'] ?? '') ?>">
+                        </div>
+                    </div>
+
+                    <div class="grid-2">
+                        <div>
+                            <label for="regPassword">Password *</label>
+                            <input type="password" id="regPassword" name="password" minlength="8" required
+                                   placeholder="At least 8 characters">
+                        </div>
+                        <div>
+                            <label for="regConfirmPassword">Confirm Password *</label>
+                            <input type="password" id="regConfirmPassword" name="confirm_password" minlength="8" required
+                                   placeholder="Type the password again">
+                        </div>
+                    </div>
+
+                    <p class="form-hint">Give the youth their username and password so they can log in on the Youth login.</p>
+
+                    <button type="submit" class="btn btn-primary">✅ Register Account</button>
+                </form>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title">👥 Registered Youth Accounts (<?= count($youthAccounts) ?>)</h3>
+
+                <?php if (count($youthAccounts) === 0): ?>
+                    <div class="empty-state">No youth accounts registered yet.</div>
+                <?php endif; ?>
+
+                <?php foreach ($youthAccounts as $youth): ?>
+                    <div class="list-item">
+                        <div class="item-head">
+                            <span class="item-title"><?= htmlspecialchars($youth['full_name']) ?></span>
+                            <span class="item-sub"><?= date('M j, Y', strtotime($youth['created_at'])) ?></span>
+                        </div>
+                        <div class="item-sub">
+                            @<?= htmlspecialchars($youth['username']) ?> · <?= htmlspecialchars($youth['email']) ?>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
             </div>
         </div>
 
@@ -1008,6 +1124,13 @@ body {
             });
             localStorage.setItem('lastCheckedApps', JSON.stringify(allApps));
         }, 30000); // Every 30 seconds
+
+        // === OPEN TAB FROM URL ===
+        // register-youth.php sends the admin back with ?tab=register so the message is visible
+        const tabFromUrl = new URLSearchParams(window.location.search).get('tab');
+        if (tabFromUrl) {
+            document.querySelector(`.sidebar-nav a[data-tab="${tabFromUrl}"]`)?.click();
+        }
     </script>
 </body>
 </html>
