@@ -1,0 +1,356 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>HOME</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap"
+          rel="stylesheet">
+
+    <style>
+        /* =========================
+           GENERAL SETTINGS
+        ========================= */
+
+        :root {
+            --navy: #142b49;
+            --navy-light: #203f63;
+            --gold: #c69b36;
+            --gold-light: #e4c879;
+            --white: #ffffff;
+            --text: #263449;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            color: var(--text);
+            background: #edf1f6;
+        }
+
+        /* =========================
+           MAIN PAGE BACKGROUND
+        ========================= */
+
+        .hero {
+            min-height: 100vh;
+            position: relative;
+            isolation: isolate;
+            overflow: hidden;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            padding: 45px 6%;
+            
+            background:
+                linear-gradient(
+                    115deg,
+            rgba(128, 159, 199, 0.88),
+            rgba(131, 132, 132, 0.88),
+            rgba(10, 27, 49, 0.88)
+                ),
+                url("youth_logo.jpg");
+               background-size: cover,1000px;
+               background-position: center;
+               background-repeat: no-repeat;
+        }
+
+       
+
+        /* MAIN LAYOUT*/
+
+        .container {
+            width: 100%;
+            max-width: 1250px;
+            margin: auto;
+
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            align-items: center;
+            gap: 65px;
+        }
+
+        /* LEFT SIDE */
+
+        .welcome-section {
+            color: var(--white);
+            animation: fadeUp 0.9s ease both;
+        }
+
+        .top-label {
+            display: inline-block;
+            color: var(--gold-light);
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+
+            padding: 10px 15px;
+            margin-bottom: 25px;
+
+            border: 1px solid rgba(37, 36, 34, 0.5);
+            border-radius: 30px;
+            background: rgba(33, 12, 12, 0.989);
+        }
+        
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(35px, 4.2vw, 57px);
+            line-height: 1.2;
+            font-weight: 700;
+            letter-spacing: -1px;
+            margin-bottom: 22px;
+        }
+
+        h1 span {
+            color: var(--gold-light);
+        }
+
+        .welcome-description {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 15px;
+            line-height: 1.9;
+            max-width: 480px;
+            margin-bottom: 35px;
+        }
+
+        /* GET STARTED BUTTON */
+
+        .btn {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            gap: 14px;
+
+            padding: 16px 30px;
+            min-width: 190px;
+
+            color: var(--navy);
+            background: var(--gold-light);
+
+            border: 1px solid var(--gold-light);
+            border-radius: 8px;
+
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            text-decoration: none;
+
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.18);
+            transition: transform 0.3s ease,
+                        background 0.3s ease,
+                        box-shadow 0.3s ease;
+        }
+
+        .btn .arrow {
+            font-size: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .btn:hover {
+            background: var(--white);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+        }
+
+        .btn:hover .arrow {
+            transform: translateX(5px);
+        }
+
+        .btn:focus-visible {
+            outline: 3px solid var(--white);
+            outline-offset: 5px;
+        }
+
+        .welcome-note {
+            margin-top: 30px;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 12px;
+            letter-spacing: 0.5px;
+        }
+
+        /* MISSION tas VISION */
+
+        .info-panel {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+
+            background: rgba(255, 255, 255, 0.96);
+            border: 1px solid rgba(255, 255, 255, 0.65);
+            border-radius: 18px;
+            overflow: hidden;
+
+            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.25);
+
+            animation: fadeUp 1s ease 0.15s both;
+        }
+
+        .info-card {
+            padding: 36px 25px;
+            min-height: 310px;
+            position: relative;
+            transition: background 0.3s ease;
+        }
+
+        .info-card:first-child {
+            border-right: 1px solid #e4e8ef;
+        }
+
+        .info-card:hover {
+            background: #f8f6ef;
+        }
+
+        .info-number {
+            display: block;
+            color: var(--gold);
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            margin-bottom: 22px;
+        }
+
+        .info-card h2 {
+            font-family: 'Playfair Display', serif;
+            color: var(--navy);
+            font-size: 25px;
+            margin-bottom: 18px;
+        }
+
+        .small-divider {
+            height: 3px;
+            width: 45px;
+            background: var(--gold);
+            border-radius: 5px;
+            margin-bottom: 22px;
+        }
+
+        .info-card p {
+            color: #687487;
+            font-size: 13px;
+            line-height: 1.9;
+        }
+
+        .panel-footer {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 15px;
+            background: #f5f7fa;
+            border-top: 1px solid #e4e8ef;
+
+            color: #7b8797;
+            font-size: 10px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        
+    </style>
+</head>
+
+<body>
+
+    <main class="hero">
+
+        <div class="container">
+
+            <!-- LEFT SIDE: TITLE AND GET STARTED -->
+
+            <section class="welcome-section">
+
+                <p class="top-label">
+                    Barangay 22 Binanuahan East, Legazpi City 
+                </p>
+
+                <h1>
+                    Youth Information and
+                    <span>Assistance Management</span>
+                </h1>
+
+                <p class="welcome-description">
+                    Empowering the youth through accessible information,
+                    community services, and meaningful assistance.
+                    Your future starts with the right information.
+                </p>
+
+                <a href="YIAMS — Role Selection.html"
+                   class="btn">
+
+                    GET STARTED
+
+                    <span class="arrow" aria-hidden="true">→</span>
+
+                </a>
+
+
+            </section>
+
+
+            <!-- RIGHT SIDE: MISSION AND VISION -->
+
+            <section class="info-panel"
+                     aria-label="Our mission and vision">
+
+                <article class="info-card">
+
+                    <span class="info-number">OUR PURPOSE</span>
+
+                    <h2>Mission</h2>
+
+                    <div class="small-divider"></div>
+
+                    <p>
+                         para updaed mga junakis ng barangay
+
+                    </p>
+
+                </article>
+
+
+                <article class="info-card">
+
+                    <span class="info-number"> OUR FUTURE</span>
+
+                    <h2>Vision</h2>
+
+                    <div class="small-divider"></div>
+
+                    <p>
+                        pag updated daw ang mga anak magigiing active sila 
+                        pag naging active sila edi paldoo mga kurakot na officials
+                  
+                    </p>
+
+                </article>
+
+
+                
+
+            </section>
+
+        </div>
+
+    </main>
+
+</body>
+</html>
